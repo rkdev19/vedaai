@@ -1,5 +1,5 @@
 import { Worker } from 'bullmq'
-import redis from '../config/redis'
+import { redisConnectionConfig } from '../config/redis'
 import Assignment from '../models/Assignment'
 import GeneratedPaper from '../models/GeneratedPaper'
 import { generatePaper } from '../services/aiService'
@@ -43,7 +43,7 @@ export function startGenerationWorker() {
         throw err
       }
     },
-    { connection: redis, concurrency: 2 }
+    { connection: redisConnectionConfig, concurrency: 2 }
   )
 
   worker.on('failed', (job, err) => {

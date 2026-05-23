@@ -1,11 +1,16 @@
 import IORedis from 'ioredis'
 
-const redis = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  maxRetriesPerRequest: null,
-})
+export const redisConnectionConfig = {
+  host: 'fond-mosquito-104406.upstash.io',
+  port: 6379,
+  password: process.env.REDIS_PASSWORD,
+  tls: {},
+  maxRetriesPerRequest: null as null,
+}
 
-redis.on('error', (err) => {
-  console.error('Redis error:', err)
-})
+const redis = new IORedis(redisConnectionConfig)
+
+redis.on('error', (err) => console.error('Redis error:', err.message))
+redis.on('connect', () => console.log('Redis connected'))
 
 export default redis

@@ -3,11 +3,11 @@ import multer from 'multer'
 import { Queue } from 'bullmq'
 import Assignment from '../models/Assignment'
 import GeneratedPaper from '../models/GeneratedPaper'
-import redis from '../config/redis'
+import { redisConnectionConfig } from '../config/redis'
 
 const router = Router()
 const upload = multer({ storage: multer.memoryStorage() })
-const queue = new Queue('paper-generation', { connection: redis })
+const queue = new Queue('paper-generation', { connection: redisConnectionConfig })
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
   try {
