@@ -5,7 +5,6 @@ import { GeneratedPaper, Question } from '@/types'
 
 interface Props {
   paper: GeneratedPaper
-  hideBadges?: boolean
 }
 
 const difficultyClasses: Record<Question['difficulty'], string> = {
@@ -14,11 +13,11 @@ const difficultyClasses: Record<Question['difficulty'], string> = {
   hard: 'bg-red-100 text-red-700 shadow-sm',
 }
 
-const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper, hideBadges }, ref) => {
+const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper }, ref) => {
   const hasAnswers = paper.sections.some((s) => s.questions.some((q) => q.answer))
 
   return (
-    <div ref={ref} className="bg-white rounded-2xl border border-gray-200 shadow-xl p-8 md:p-12 max-w-3xl mx-auto">
+    <div ref={ref} id="paper-content" className="bg-white rounded-2xl border border-gray-200 shadow-xl p-8 md:p-12 max-w-3xl mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
         <h1 className="text-xl font-bold text-gray-900">{paper.schoolName}, Sector-4, Bokaro</h1>
@@ -62,14 +61,12 @@ const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper, hideBadges }, 
               <li key={qi} className="text-sm">
                 <div className="flex items-start gap-2">
                   <span className="flex-1 text-gray-900">{q.text}</span>
-                  {!hideBadges && (
-                    <span
-                      data-difficulty={q.difficulty}
-                      className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium capitalize ${difficultyClasses[q.difficulty]}`}
-                    >
-                      {q.difficulty}
-                    </span>
-                  )}
+                  <span
+                    data-difficulty={q.difficulty}
+                    className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium capitalize ${difficultyClasses[q.difficulty]}`}
+                  >
+                    {q.difficulty}
+                  </span>
                   <span className="shrink-0 text-xs text-gray-500 ml-1">[{q.marks} Marks]</span>
                 </div>
               </li>

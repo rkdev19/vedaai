@@ -15,7 +15,6 @@ export default function OutputPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [regenerating, setRegenerating] = useState(false)
-  const [hideBadges, setHideBadges] = useState(false)
 
   useEffect(() => {
     fetchResult()
@@ -47,42 +46,8 @@ export default function OutputPage() {
     }
   }
 
-  async function handleDownload() {
-    const element = paperRef.current
-    if (!element) return
-
-    const html2pdf = (await import('html2pdf.js')).default
-
-    const badges = element.querySelectorAll('[data-difficulty]')
-    const originalStyles: string[] = []
-    badges.forEach((badge, i) => {
-      const el = badge as HTMLElement
-      originalStyles[i] = el.getAttribute('style') || ''
-      el.style.backgroundColor = '#f3f4f6'
-      el.style.color = '#374151'
-      el.style.border = '1px solid #d1d5db'
-    })
-
-    await html2pdf()
-      .set({
-        margin: 10,
-        filename: `question-paper.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true,
-          ignoreElements: (el: Element) => el.classList.contains('no-print'),
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      })
-      .from(element)
-      .save()
-
-    badges.forEach((badge, i) => {
-      const el = badge as HTMLElement
-      el.setAttribute('style', originalStyles[i])
-    })
+  const handleDownload = () => {
+    window.print()
   }
 
   if (loading) {
@@ -110,7 +75,7 @@ export default function OutputPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Dark header */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl px-6 py-4 mb-6 flex items-start justify-between gap-4">
+      <div className="no-print bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl px-6 py-4 mb-6 flex items-start justify-between gap-4">
         <p className="text-sm leading-relaxed flex-1">
           Certainly, Lakshya! Here are customized Question Paper for your CBSE Grade{' '}
           <strong>{paper.gradeLevel}</strong> {paper.subject} classes on the NCERT chapters:
@@ -125,10 +90,10 @@ export default function OutputPage() {
       </div>
 
       {/* Paper */}
-      <QuestionPaper ref={paperRef} paper={paper} hideBadges={hideBadges} />
+      <QuestionPaper ref={paperRef} paper={paper} />
 
       {/* Action bar */}
-      <div className="flex justify-center gap-4 mt-6 mb-8">
+      <div className="no-print flex justify-center gap-4 mt-6 mb-8">
         <button
           onClick={handleRegenerate}
           disabled={regenerating}
