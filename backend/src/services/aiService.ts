@@ -1,8 +1,7 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { IAssignment } from '../models/Assignment'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 export interface IPaperData {
   schoolName: string
@@ -28,9 +27,10 @@ export async function generatePaper(assignment: IAssignment): Promise<IPaperData
     .map((q) => `- ${q.type}: ${q.numQuestions} questions, ${q.marks} marks each`)
     .join('\n')
 
-  const prompt = `You are an expert Indian school exam paper creator. Return ONLY a valid JSON object with no markdown, no explanation, no code fences. Follow the exact schema provided. All questions must be appropriate for the grade level.
+  const systemPrompt =
+    'You are an expert Indian school exam paper creator. Return ONLY a valid JSON object with no markdown, no explanation, no code fences. Follow the exact schema provided. All questions must be appropriate for the grade level.'
 
-Create a question paper for:
+  const userPrompt = `Create a question paper for:
 - Subject: ${assignment.subject}
 - Grade/Class: ${assignment.gradeLevel}
 - School: Delhi Public School
@@ -65,8 +65,17 @@ Return this exact JSON structure:
   ]
 }`
 
-  const result = await model.generateContent(prompt)
-  const text = result.response.text()
+  const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    temperature: 0.7,
+    max_tokens: 3000,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+  })
+
+  const text = response.choices[0].message.content!
 
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim())
