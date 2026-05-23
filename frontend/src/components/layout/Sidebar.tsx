@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
@@ -42,11 +43,8 @@ export default function Sidebar() {
       {/* ── Desktop sidebar ── */}
       <aside className="hidden md:flex w-64 flex-col fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-sm z-30">
         {/* Logo */}
-        <div className="flex items-center gap-2 p-6">
-          <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">V</span>
-          </div>
-          <span className="font-bold text-gray-900 text-lg">VedaAI</span>
+        <div className="flex items-center p-6">
+          <Image src="/logo.png" alt="VedaAI" width={120} height={36} priority />
         </div>
 
         {/* Create button */}
@@ -113,11 +111,8 @@ export default function Sidebar() {
 
       {/* ── Mobile top header ── */}
       <header className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
-        <Link href="/assignments" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center">
-            <span className="text-white font-bold text-xs">V</span>
-          </div>
-          <span className="font-bold text-gray-900 text-base">VedaAI</span>
+        <Link href="/assignments">
+          <Image src="/logo.png" alt="VedaAI" width={100} height={30} priority />
         </Link>
 
         <div className="flex items-center gap-3">
