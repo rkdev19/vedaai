@@ -144,7 +144,7 @@ export default function CreateAssignmentPage() {
         {/* Progress bar */}
         <div className="h-1 bg-gray-100 rounded-full mb-8 overflow-hidden">
           <div
-            className="h-full bg-gray-900 rounded-full transition-all duration-300"
+            className="h-full bg-gray-900 rounded-full transition-all duration-300 ease-in-out"
             style={{ width: step === 1 ? '50%' : '100%' }}
           />
         </div>
@@ -163,7 +163,7 @@ export default function CreateAssignmentPage() {
                 onDragLeave={() => setDragging(false)}
                 onDrop={handleFileDrop}
                 className={`rounded-xl border-2 border-dashed p-8 text-center transition-colors ${
-                  dragging ? 'border-gray-400 bg-gray-50' : 'border-gray-300 bg-white'
+                  dragging ? 'border-orange-400 bg-orange-50' : 'border-gray-300 bg-white'
                 }`}
               >
                 <UploadCloud className="w-10 h-10 text-gray-400 mx-auto mb-3" />
@@ -266,7 +266,7 @@ export default function CreateAssignmentPage() {
               </button>
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-6 py-2.5 text-sm hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-6 py-2.5 text-sm hover:bg-gray-800 active:scale-95 transition-all duration-100"
               >
                 Next
                 <ArrowRight className="w-4 h-4" />
@@ -327,7 +327,7 @@ export default function CreateAssignmentPage() {
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-6 py-2.5 text-sm hover:bg-gray-800 transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-6 py-2.5 text-sm hover:bg-gray-800 active:scale-95 transition-all duration-100 disabled:opacity-60"
               >
                 {status === 'submitting' ? 'Generating...' : 'Generate'}
                 <ArrowRight className="w-4 h-4" />

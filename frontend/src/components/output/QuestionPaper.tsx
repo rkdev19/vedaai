@@ -9,16 +9,16 @@ interface Props {
 }
 
 const difficultyClasses: Record<Question['difficulty'], string> = {
-  easy: 'bg-green-100 text-green-700',
-  moderate: 'bg-yellow-100 text-yellow-700',
-  hard: 'bg-red-100 text-red-700',
+  easy: 'bg-green-100 text-green-700 shadow-sm',
+  moderate: 'bg-yellow-100 text-yellow-700 shadow-sm',
+  hard: 'bg-red-100 text-red-700 shadow-sm',
 }
 
 const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper, hideBadges }, ref) => {
   const hasAnswers = paper.sections.some((s) => s.questions.some((q) => q.answer))
 
   return (
-    <div ref={ref} className="bg-white rounded-2xl border border-gray-200 p-8 md:p-12 max-w-3xl mx-auto">
+    <div ref={ref} className="bg-white rounded-2xl border border-gray-200 shadow-xl p-8 md:p-12 max-w-3xl mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
         <h1 className="text-xl font-bold text-gray-900">{paper.schoolName}, Sector-4, Bokaro</h1>
@@ -39,22 +39,22 @@ const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper, hideBadges }, 
       <div className="text-sm flex flex-col gap-1.5 mb-6">
         <div>
           Name:{' '}
-          <span className="inline-block border-b border-gray-900 w-40 mx-1 mb-0.5" />
+          <span className="inline-block border-b-2 border-gray-400 w-40 mx-1 mb-0.5" />
         </div>
         <div>
           Roll Number:{' '}
-          <span className="inline-block border-b border-gray-900 w-32 mx-1 mb-0.5" />
+          <span className="inline-block border-b-2 border-gray-400 w-32 mx-1 mb-0.5" />
         </div>
         <div>
           Class: {paper.gradeLevel} Section:{' '}
-          <span className="inline-block border-b border-gray-900 w-24 mx-1 mb-0.5" />
+          <span className="inline-block border-b-2 border-gray-400 w-24 mx-1 mb-0.5" />
         </div>
       </div>
 
       {/* Sections */}
       {paper.sections.map((section, si) => (
         <div key={si} className="mb-6">
-          <h2 className="text-base font-bold text-center text-gray-900">{section.title}</h2>
+          <h2 className="text-xs font-bold text-center text-gray-900 uppercase tracking-wide">{section.title}</h2>
           <p className="font-semibold text-sm mt-2 text-gray-800">{section.questionType}</p>
           <p className="italic text-sm text-gray-600 mb-3">{section.instruction}</p>
           <ol className="list-decimal pl-5 space-y-2">

@@ -90,7 +90,7 @@ export default function OutputPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Dark header */}
-      <div className="bg-gray-900 text-white rounded-xl px-6 py-4 mb-6 flex items-start justify-between gap-4">
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl px-6 py-4 mb-6 flex items-start justify-between gap-4">
         <p className="text-sm leading-relaxed flex-1">
           Certainly, Lakshya! Here are customized Question Paper for your CBSE Grade{' '}
           <strong>{paper.gradeLevel}</strong> {paper.subject} classes on the NCERT chapters:

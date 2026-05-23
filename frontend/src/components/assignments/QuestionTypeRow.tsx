@@ -29,7 +29,7 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-3 py-2">
+    <div className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-gray-50 transition-colors">
       <select
         value={questionType.type}
         onChange={(e) => updateQuestionType(questionType.id, { type: e.target.value })}
@@ -47,7 +47,7 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
         <button
           type="button"
           onClick={() => adjust('numQuestions', -1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
         >
           <Minus className="w-3 h-3" />
         </button>
@@ -57,7 +57,7 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
         <button
           type="button"
           onClick={() => adjust('numQuestions', 1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
         >
           <Plus className="w-3 h-3" />
         </button>
@@ -68,7 +68,7 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
         <button
           type="button"
           onClick={() => adjust('marks', -1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
         >
           <Minus className="w-3 h-3" />
         </button>
@@ -78,7 +78,7 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
         <button
           type="button"
           onClick={() => adjust('marks', 1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
         >
           <Plus className="w-3 h-3" />
         </button>

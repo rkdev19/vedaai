@@ -28,7 +28,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 flex-col fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-30">
+      <aside className="hidden md:flex w-64 flex-col fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-sm z-30">
         {/* Logo */}
         <div className="flex items-center gap-2 p-6">
           <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
@@ -41,7 +41,7 @@ export default function Sidebar() {
         <div className="px-4">
           <Link
             href="/assignments/create"
-            className="flex items-center justify-center gap-2 w-full rounded-full bg-gray-900 text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors"
+            className="flex items-center justify-center gap-2 w-full rounded-full bg-gray-900 text-white py-2.5 text-sm font-medium hover:bg-gray-800 hover:ring-2 hover:ring-orange-400 hover:ring-offset-1 active:scale-95 transition-all duration-100"
           >
             <Plus className="w-4 h-4" />
             Create Assignment
@@ -62,8 +62,8 @@ export default function Sidebar() {
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                   active
-                    ? 'bg-gray-100 text-gray-900 font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-gray-100 text-gray-900 font-medium border-l-2 border-gray-900'
+                    : 'text-gray-600 hover:bg-gray-100 border-l-2 border-transparent'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -87,8 +87,8 @@ export default function Sidebar() {
             <Settings className="w-4 h-4" />
             Settings
           </Link>
-          <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 flex items-center gap-3">
-            <div className="rounded-full w-10 h-10 bg-orange-100 shrink-0 flex items-center justify-center">
+          <div className="rounded-xl bg-gray-50 border border-gray-200 shadow-sm p-3 flex items-center gap-3">
+            <div className="rounded-full w-10 h-10 bg-gradient-to-br from-orange-200 to-orange-100 shrink-0 flex items-center justify-center">
               <span className="text-orange-600 font-semibold text-sm">D</span>
             </div>
             <div className="min-w-0">
