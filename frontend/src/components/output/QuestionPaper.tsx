@@ -64,6 +64,7 @@ const QuestionPaper = forwardRef<HTMLDivElement, Props>(({ paper, hideBadges }, 
                   <span className="flex-1 text-gray-900">{q.text}</span>
                   {!hideBadges && (
                     <span
+                      data-difficulty={q.difficulty}
                       className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium capitalize ${difficultyClasses[q.difficulty]}`}
                     >
                       {q.difficulty}

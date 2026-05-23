@@ -48,21 +48,41 @@ export default function OutputPage() {
   }
 
   async function handleDownload() {
-    if (!paperRef.current) return
+    const element = paperRef.current
+    if (!element) return
+
     const html2pdf = (await import('html2pdf.js')).default
-    setHideBadges(true)
-    await new Promise((r) => setTimeout(r, 100))
-    html2pdf()
+
+    const badges = element.querySelectorAll('[data-difficulty]')
+    const originalStyles: string[] = []
+    badges.forEach((badge, i) => {
+      const el = badge as HTMLElement
+      originalStyles[i] = el.getAttribute('style') || ''
+      el.style.backgroundColor = '#f3f4f6'
+      el.style.color = '#374151'
+      el.style.border = '1px solid #d1d5db'
+    })
+
+    await html2pdf()
       .set({
         margin: 10,
-        filename: `question-paper-${paper?.subject}-${paper?.gradeLevel}.pdf`,
+        filename: `question-paper.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          ignoreElements: (el: Element) => el.classList.contains('no-print'),
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       })
-      .from(paperRef.current)
+      .from(element)
       .save()
-      .then(() => setHideBadges(false))
+
+    badges.forEach((badge, i) => {
+      const el = badge as HTMLElement
+      el.setAttribute('style', originalStyles[i])
+    })
   }
 
   if (loading) {
