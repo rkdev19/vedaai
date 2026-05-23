@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
   Users,
@@ -10,10 +10,14 @@ import {
   Library,
   Settings,
   Plus,
+  Bell,
+  Menu,
+  BookOpen,
+  Sparkles,
 } from 'lucide-react'
 import { useAssignmentStore } from '@/store/assignmentStore'
 
-const navItems = [
+const desktopNavItems = [
   { label: 'Home', icon: LayoutDashboard, href: '/' },
   { label: 'My Groups', icon: Users, href: '/groups' },
   { label: 'Assignments', icon: FileText, href: '/assignments' },
@@ -21,13 +25,21 @@ const navItems = [
   { label: 'My Library', icon: Library, href: '/library' },
 ]
 
+const mobileNavItems = [
+  { label: 'Home', icon: LayoutDashboard, href: '/assignments' },
+  { label: 'Assignments', icon: FileText, href: '/assignments' },
+  { label: 'Library', icon: BookOpen, href: '/library' },
+  { label: 'AI Toolkit', icon: Sparkles, href: '/toolkit' },
+]
+
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const assignments = useAssignmentStore((s) => s.assignments)
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* ── Desktop sidebar ── */}
       <aside className="hidden md:flex w-64 flex-col fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-sm z-30">
         {/* Logo */}
         <div className="flex items-center gap-2 p-6">
@@ -50,7 +62,7 @@ export default function Sidebar() {
 
         {/* Nav */}
         <nav className="mt-8 flex flex-col gap-1 px-3 flex-1">
-          {navItems.map((item) => {
+          {desktopNavItems.map((item) => {
             const Icon = item.icon
             const active =
               item.href === '/'
@@ -99,25 +111,68 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white z-30 flex">
-        {[navItems[0], navItems[2], navItems[4], navItems[3]].map((item) => {
+      {/* ── Mobile top header ── */}
+      <header className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
+        <Link href="/assignments" className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center">
+            <span className="text-white font-bold text-xs">V</span>
+          </div>
+          <span className="font-bold text-gray-900 text-base">VedaAI</span>
+        </Link>
+
+        <div className="flex items-center gap-3">
+          <button className="relative text-gray-500">
+            <Bell className="w-5 h-5" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+            <span className="text-white text-xs font-medium">J</span>
+          </div>
+          <button className="text-gray-600">
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
+      </header>
+
+      {/* ── Mobile bottom nav ── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-gray-900 z-50 flex items-center">
+        {mobileNavItems.map((item) => {
           const Icon = item.icon
-          const active = pathname.startsWith(item.href)
+          const active =
+            item.href === '/assignments'
+              ? pathname.startsWith('/assignments') || pathname.startsWith('/output')
+              : pathname.startsWith(item.href)
           return (
             <Link
-              key={item.href}
+              key={item.label}
               href={item.href}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 text-xs ${
-                active ? 'text-orange-400' : 'text-gray-400'
-              }`}
+              className="flex-1 flex flex-col items-center justify-center h-full"
             >
-              <Icon className="w-5 h-5" />
-              <span>{item.label.split("'")[0].split(' ')[0]}</span>
+              {active ? (
+                <>
+                  <div className="bg-white/10 rounded-xl px-3 py-1 mb-0.5">
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-white text-[10px] font-medium">{item.label}</span>
+                </>
+              ) : (
+                <>
+                  <Icon className="w-5 h-5 text-gray-500 mb-0.5" />
+                  <span className="text-gray-500 text-[10px]">{item.label}</span>
+                </>
+              )}
             </Link>
           )
         })}
       </nav>
+
+      {/* ── Mobile floating + button ── */}
+      <button
+        onClick={() => router.push('/assignments/create')}
+        className="md:hidden fixed bottom-20 right-4 z-50 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center active:scale-95 transition-transform duration-100"
+      >
+        <Plus className="w-5 h-5 text-orange-500" />
+      </button>
     </>
   )
 }
