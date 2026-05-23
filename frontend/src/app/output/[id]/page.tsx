@@ -15,6 +15,7 @@ export default function OutputPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [regenerating, setRegenerating] = useState(false)
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     fetchResult()
@@ -46,8 +47,25 @@ export default function OutputPage() {
     }
   }
 
-  const handleDownload = () => {
-    window.print()
+  const handleDownload = async () => {
+    setDownloading(true)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/assignments/${id}/pdf`
+      )
+      if (!response.ok) throw new Error('PDF generation failed')
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `question-paper-${paper?.subject}-${paper?.gradeLevel}.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch {
+      setError('Failed to download PDF. Please try again.')
+    } finally {
+      setDownloading(false)
+    }
   }
 
   if (loading) {
@@ -82,10 +100,20 @@ export default function OutputPage() {
         </p>
         <button
           onClick={handleDownload}
-          className="shrink-0 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition-colors"
+          disabled={downloading}
+          className="shrink-0 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition-colors disabled:opacity-60"
         >
-          <Download className="w-4 h-4" />
-          Download as PDF
+          {downloading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              Downloading...
+            </>
+          ) : (
+            <>
+              <Download className="w-4 h-4" />
+              Download as PDF
+            </>
+          )}
         </button>
       </div>
 
