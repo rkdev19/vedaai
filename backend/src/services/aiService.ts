@@ -1,7 +1,8 @@
-import OpenAI from 'openai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { IAssignment } from '../models/Assignment'
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
 export interface IPaperData {
   schoolName: string
@@ -27,7 +28,9 @@ export async function generatePaper(assignment: IAssignment): Promise<IPaperData
     .map((q) => `- ${q.type}: ${q.numQuestions} questions, ${q.marks} marks each`)
     .join('\n')
 
-  const userPrompt = `Create a question paper for:
+  const prompt = `You are an expert Indian school exam paper creator. Return ONLY a valid JSON object with no markdown, no explanation, no code fences. Follow the exact schema provided. All questions must be appropriate for the grade level.
+
+Create a question paper for:
 - Subject: ${assignment.subject}
 - Grade/Class: ${assignment.gradeLevel}
 - School: Delhi Public School
@@ -62,24 +65,12 @@ Return this exact JSON structure:
   ]
 }`
 
-  const response = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    temperature: 0.7,
-    max_tokens: 3000,
-    messages: [
-      {
-        role: 'system',
-        content:
-          'You are an expert Indian school exam paper creator. Return ONLY a valid JSON object with no markdown, no explanation, no code fences. Follow the exact schema provided. All questions must be appropriate for the grade level.',
-      },
-      { role: 'user', content: userPrompt },
-    ],
-  })
-
-  const raw = response.choices[0]?.message?.content ?? ''
+  const result = await model.generateContent(prompt)
+  const text = result.response.text()
 
   try {
-    return JSON.parse(raw) as IPaperData
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim())
+    return parsed as IPaperData
   } catch {
     throw new Error('AI returned invalid JSON')
   }
