@@ -4,8 +4,6 @@ import { Queue } from 'bullmq'
 import Assignment from '../models/Assignment'
 import GeneratedPaper from '../models/GeneratedPaper'
 import { redisConnectionConfig } from '../config/redis'
-import { buildPaperHtml } from '../services/paperHtml'
-import { generatePDF } from '../services/pdfService'
 
 const router = Router()
 const upload = multer({ storage: multer.memoryStorage() })
@@ -114,23 +112,6 @@ router.get('/:id/result', async (req: Request, res: Response) => {
   }
 })
 
-router.get('/:id/pdf', async (req: Request, res: Response) => {
-  try {
-    const paper = await GeneratedPaper.findOne({ assignmentId: req.params.id })
-    if (!paper) {
-      res.status(404).json({ error: 'Result not found' })
-      return
-    }
-    const html = buildPaperHtml(paper)
-    const buffer = await generatePDF(html)
-    res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', 'attachment; filename="question-paper.pdf"')
-    res.send(buffer)
-  } catch (err) {
-    console.error('PDF generation error:', err)
-    res.status(500).json({ error: 'Failed to generate PDF' })
-  }
-})
 
 router.post('/:id/regenerate', async (req: Request, res: Response) => {
   try {

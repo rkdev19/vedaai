@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Download, RefreshCw } from 'lucide-react'
 import { getResult, regenerate } from '@/lib/api'
@@ -10,12 +10,10 @@ import QuestionPaper from '@/components/output/QuestionPaper'
 export default function OutputPage() {
   const params = useParams()
   const id = params.id as string
-  const paperRef = useRef<HTMLDivElement>(null)
   const [paper, setPaper] = useState<GeneratedPaper | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [regenerating, setRegenerating] = useState(false)
-  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     fetchResult()
@@ -47,25 +45,8 @@ export default function OutputPage() {
     }
   }
 
-  const handleDownload = async () => {
-    setDownloading(true)
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/assignments/${id}/pdf`
-      )
-      if (!response.ok) throw new Error('PDF generation failed')
-      const blob = await response.blob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `question-paper-${paper?.subject}-${paper?.gradeLevel}.pdf`
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch {
-      setError('Failed to download PDF. Please try again.')
-    } finally {
-      setDownloading(false)
-    }
+  function handleDownload() {
+    window.print()
   }
 
   if (loading) {
@@ -118,8 +99,7 @@ export default function OutputPage() {
           </p>
           <button
             onClick={handleDownload}
-            disabled={downloading}
-            className="shrink-0 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-50 active:scale-95 duration-100"
+            className="shrink-0 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 active:scale-95 duration-100"
             style={{
               background: '#FFFFFF',
               color: '#303030',
@@ -128,17 +108,8 @@ export default function OutputPage() {
               whiteSpace: 'nowrap',
             }}
           >
-            {downloading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin" />
-                Downloading...
-              </>
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                Download as PDF
-              </>
-            )}
+            <Download className="w-4 h-4" />
+            Download as PDF
           </button>
         </div>
 
@@ -157,7 +128,7 @@ export default function OutputPage() {
       </div>
 
       {/* Paper */}
-      <QuestionPaper ref={paperRef} paper={paper} />
+      <QuestionPaper paper={paper} />
     </div>
   )
 }
