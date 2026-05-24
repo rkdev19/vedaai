@@ -32,47 +32,43 @@ export default function AssignmentsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
       </div>
     )
   }
 
-  if (assignments.length === 0) {
-    return <EmptyState />
-  }
+  if (assignments.length === 0) return <EmptyState />
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
-        <h1 className="font-bold text-lg text-gray-900">Assignments</h1>
-        <span className="w-2 h-2 rounded-full bg-green-500" />
-      </div>
-      <p className="text-sm text-gray-500 mb-6">
-        Manage and create assignments for your classes.
-      </p>
-
       {/* Filter bar */}
-      <div className="flex items-center gap-3 mb-6">
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-          <Filter className="w-4 h-4" />
-          Filter By
+      <div
+        className="flex items-center gap-3 mb-6 h-16 px-4 rounded-[20px]"
+        style={{ background: '#FFFFFF' }}
+      >
+        <button className="flex items-center gap-1.5 shrink-0">
+          <Filter className="w-4 h-4" style={{ color: '#A9A9A9' }} />
+          <span className="font-bold text-sm" style={{ color: '#A9A9A9' }}>Filter By</span>
         </button>
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#A9A9A9' }} />
           <input
             type="text"
             placeholder="Search Assignment"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/20"
+            className="w-full h-11 pl-9 pr-4 rounded-full text-sm bg-transparent focus:outline-none"
+            style={{
+              border: '1px solid rgba(0,0,0,0.2)',
+              color: '#303030',
+            }}
           />
         </div>
       </div>
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-500 text-center py-12">
+        <p className="text-sm text-center py-12" style={{ color: 'rgba(94,94,94,0.8)' }}>
           No assignments match your search.
         </p>
       ) : (
@@ -84,10 +80,15 @@ export default function AssignmentsPage() {
       )}
 
       {/* Floating create button */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20">
+      <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-20">
         <Link
           href="/assignments/create"
-          className="flex items-center gap-2 rounded-full bg-gray-900 text-white px-6 py-3 shadow-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+          className="flex items-center gap-2 text-white text-base font-medium px-6 py-3 transition-opacity hover:opacity-90 active:scale-95 duration-100"
+          style={{
+            background: '#181818',
+            borderRadius: '48px',
+            boxShadow: '0px 16px 48px rgba(0,0,0,0.12), 0px 32px 48px rgba(0,0,0,0.2)',
+          }}
         >
           <Plus className="w-4 h-4" />
           Create Assignment

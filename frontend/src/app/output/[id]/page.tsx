@@ -79,10 +79,11 @@ export default function OutputPage() {
   if (error || !paper) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <p className="text-gray-600">{error || 'Paper not found'}</p>
+        <p style={{ color: 'rgba(94,94,94,0.8)' }}>{error || 'Paper not found'}</p>
         <button
           onClick={fetchResult}
-          className="rounded-full bg-gray-900 text-white px-6 py-2.5 text-sm hover:bg-gray-800 transition-colors"
+          className="text-white text-sm px-6 py-2.5"
+          style={{ borderRadius: '48px', background: '#181818' }}
         >
           Retry
         </button>
@@ -92,45 +93,71 @@ export default function OutputPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Dark header */}
-      <div className="no-print bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl px-6 py-4 mb-6 flex items-start justify-between gap-4">
-        <p className="text-sm leading-relaxed flex-1">
-          Certainly, Lakshya! Here are customized Question Paper for your CBSE Grade{' '}
-          <strong>{paper.gradeLevel}</strong> {paper.subject} classes on the NCERT chapters:
-        </p>
-        <button
-          onClick={handleDownload}
-          disabled={downloading}
-          className="shrink-0 flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition-colors disabled:opacity-60"
+      {/* Outer card */}
+      <div
+        className="no-print"
+        style={{
+          background: '#5E5E5E',
+          borderRadius: '32px',
+          padding: '20px',
+          marginBottom: '24px',
+        }}
+      >
+        {/* AI header bar */}
+        <div
+          className="flex items-start justify-between gap-4 p-5"
+          style={{
+            background: 'rgba(24,24,24,0.8)',
+            borderRadius: '24px',
+          }}
         >
-          {downloading ? (
-            <>
-              <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              Downloading...
-            </>
-          ) : (
-            <>
-              <Download className="w-4 h-4" />
-              Download as PDF
-            </>
-          )}
-        </button>
+          <p className="text-sm leading-relaxed flex-1" style={{ color: 'rgba(255,255,255,0.8)' }}>
+            Certainly! Here is a customized Question Paper for your{' '}
+            <strong className="text-white">{paper.gradeLevel}</strong>{' '}
+            {paper.subject} class:
+          </p>
+          <button
+            onClick={handleDownload}
+            disabled={downloading}
+            className="shrink-0 flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-50 active:scale-95 duration-100"
+            style={{
+              background: '#FFFFFF',
+              color: '#303030',
+              borderRadius: '48px',
+              padding: '10px 20px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {downloading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin" />
+                Downloading...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                Download as PDF
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Regenerate */}
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={handleRegenerate}
+            disabled={regenerating}
+            className="flex items-center gap-2 text-sm transition-opacity hover:opacity-70 disabled:opacity-40"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
+          >
+            <RefreshCw className={`w-4 h-4 ${regenerating ? 'animate-spin' : ''}`} />
+            {regenerating ? 'Regenerating...' : 'Regenerate'}
+          </button>
+        </div>
       </div>
 
       {/* Paper */}
       <QuestionPaper ref={paperRef} paper={paper} />
-
-      {/* Action bar */}
-      <div className="no-print flex justify-center gap-4 mt-6 mb-8">
-        <button
-          onClick={handleRegenerate}
-          disabled={regenerating}
-          className="flex items-center gap-2 rounded-full border border-gray-300 px-5 py-2 text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
-        >
-          <RefreshCw className={`w-4 h-4 ${regenerating ? 'animate-spin' : ''}`} />
-          {regenerating ? 'Regenerating...' : 'Regenerate'}
-        </button>
-      </div>
     </div>
   )
 }

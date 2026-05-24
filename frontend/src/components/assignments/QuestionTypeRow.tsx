@@ -29,11 +29,20 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-gray-50 transition-colors">
+    <div className="flex items-center gap-2 py-1.5">
       <select
         value={questionType.type}
         onChange={(e) => updateQuestionType(questionType.id, { type: e.target.value })}
-        className="rounded-lg border border-gray-200 px-3 py-2 text-sm flex-1 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20"
+        className="flex-1 text-sm focus:outline-none appearance-none"
+        style={{
+          height: '44px',
+          borderRadius: '48px',
+          border: '1px solid rgba(0,0,0,0.15)',
+          background: '#FFFFFF',
+          color: '#303030',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+        }}
       >
         {QUESTION_TYPES.map((t) => (
           <option key={t} value={t}>
@@ -43,42 +52,66 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
       </select>
 
       {/* No. of Questions counter */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div
+        className="flex items-center shrink-0"
+        style={{
+          height: '44px',
+          borderRadius: '48px',
+          background: '#FFFFFF',
+          border: '1px solid rgba(0,0,0,0.15)',
+          padding: '0 8px',
+          gap: '4px',
+        }}
+      >
         <button
           type="button"
           onClick={() => adjust('numQuestions', -1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-100"
+          style={{ color: '#303030' }}
         >
           <Minus className="w-3 h-3" />
         </button>
-        <span className="w-6 text-center text-sm font-medium text-gray-900">
+        <span className="w-5 text-center text-sm font-semibold" style={{ color: '#303030' }}>
           {questionType.numQuestions}
         </span>
         <button
           type="button"
           onClick={() => adjust('numQuestions', 1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-100"
+          style={{ color: '#303030' }}
         >
           <Plus className="w-3 h-3" />
         </button>
       </div>
 
       {/* Marks counter */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div
+        className="flex items-center shrink-0"
+        style={{
+          height: '44px',
+          borderRadius: '48px',
+          background: '#FFFFFF',
+          border: '1px solid rgba(0,0,0,0.15)',
+          padding: '0 8px',
+          gap: '4px',
+        }}
+      >
         <button
           type="button"
           onClick={() => adjust('marks', -1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-100"
+          style={{ color: '#303030' }}
         >
           <Minus className="w-3 h-3" />
         </button>
-        <span className="w-6 text-center text-sm font-medium text-gray-900">
+        <span className="w-5 text-center text-sm font-semibold" style={{ color: '#303030' }}>
           {questionType.marks}
         </span>
         <button
           type="button"
           onClick={() => adjust('marks', 1)}
-          className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all duration-100"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-100"
+          style={{ color: '#303030' }}
         >
           <Plus className="w-3 h-3" />
         </button>
@@ -88,7 +121,8 @@ export default function QuestionTypeRow({ questionType, canRemove }: Props) {
         type="button"
         onClick={() => removeQuestionType(questionType.id)}
         disabled={!canRemove}
-        className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-20 shrink-0"
+        className="transition-colors disabled:opacity-20 shrink-0"
+        style={{ color: '#A9A9A9' }}
       >
         <X className="w-5 h-5" />
       </button>

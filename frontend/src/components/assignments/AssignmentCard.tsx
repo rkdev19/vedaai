@@ -64,35 +64,71 @@ export default function AssignmentCard({ assignment, onDeleted }: Props) {
     handleCardClick()
   }
 
+  const statusColors: Record<string, { bg: string; text: string }> = {
+    done: { bg: '#dcfce7', text: '#166534' },
+    failed: { bg: '#fee2e2', text: '#991b1b' },
+    processing: { bg: '#fef9c3', text: '#854d0e' },
+    pending: { bg: '#F0F0F0', text: '#5E5E5E' },
+  }
+  const sc = statusColors[assignment.status] ?? statusColors.pending
+
   return (
     <div
       onClick={handleCardClick}
-      className="rounded-xl border border-gray-200 bg-white p-5 hover:shadow-md hover:border-gray-300 transition-all duration-200 cursor-pointer relative"
+      className="cursor-pointer relative transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
+      style={{
+        background: '#FFFFFF',
+        borderRadius: '24px',
+        padding: '24px',
+        boxShadow: '0px 2px 8px rgba(0,0,0,0.06)',
+      }}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="font-semibold text-gray-900 text-base leading-snug">{assignment.title}</h3>
+        <h3
+          className="leading-tight"
+          style={{
+            fontWeight: 800,
+            fontSize: '24px',
+            letterSpacing: '-0.04em',
+            color: '#303030',
+          }}
+        >
+          {assignment.title}
+        </h3>
         <div className="relative shrink-0" ref={menuRef}>
           <button
             onClick={(e) => {
               e.stopPropagation()
               setMenuOpen((v) => !v)
             }}
-            className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-1 rounded-full transition-colors hover:bg-gray-100"
           >
-            <MoreVertical className="w-4 h-4" />
+            <MoreVertical className="w-5 h-5" style={{ color: '#A9A9A9' }} />
           </button>
           {menuOpen && (
-            <div className="absolute right-0 top-8 w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-10 py-1 overflow-hidden animate-in fade-in duration-150">
+            <div
+              className="absolute right-0 top-9 w-44 bg-white z-10 py-1 overflow-hidden"
+              style={{
+                borderRadius: '16px',
+                boxShadow: '0px 16px 48px rgba(0,0,0,0.2), 0px 32px 48px rgba(0,0,0,0.05)',
+              }}
+            >
               <button
                 onClick={handleView}
-                className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50"
+                style={{ color: '#303030' }}
               >
                 View Assignment
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="w-full text-left px-4 py-2.5 text-sm transition-colors disabled:opacity-50"
+                style={{
+                  color: '#C53535',
+                  background: '#F6F6F6',
+                  borderRadius: '0 0 8px 8px',
+                }}
               >
                 {deleting ? 'Deleting…' : 'Delete'}
               </button>
@@ -101,24 +137,33 @@ export default function AssignmentCard({ assignment, onDeleted }: Props) {
         </div>
       </div>
 
-      <div className="mt-3 flex flex-col gap-1">
-        <p className="text-sm text-gray-500">
+      <div className="mt-4 flex flex-col gap-1">
+        <p
+          style={{
+            fontWeight: 800,
+            fontSize: '16px',
+            lineHeight: '120%',
+            color: '#303030',
+          }}
+        >
           Assigned on : {formatDate(assignment.createdAt)}
         </p>
-        <p className="text-sm text-gray-500">Due : {formatDate(assignment.dueDate)}</p>
+        <p
+          style={{
+            fontWeight: 800,
+            fontSize: '16px',
+            lineHeight: '120%',
+            color: '#303030',
+          }}
+        >
+          Due : {formatDate(assignment.dueDate)}
+        </p>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-4">
         <span
-          className={`inline-block text-xs px-2.5 py-1 rounded-full font-medium ${
-            assignment.status === 'done'
-              ? 'bg-green-100 text-green-700'
-              : assignment.status === 'failed'
-              ? 'bg-red-100 text-red-700'
-              : assignment.status === 'processing'
-              ? 'bg-yellow-100 text-yellow-700'
-              : 'bg-gray-100 text-gray-600'
-          }`}
+          className="inline-block text-xs px-3 py-1 rounded-full font-semibold capitalize"
+          style={{ background: sc.bg, color: sc.text }}
         >
           {assignment.status}
         </span>
